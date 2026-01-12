@@ -1,28 +1,34 @@
 import pandas as pd
 import joblib
 from sklearn.ensemble import RandomForestRegressor
+import os
+
+# --- Path handling (GitHub safe) ---
+BASE_DIR = os.path.dirname(__file__)
+DATA_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "data", "train_FD001.txt"))
+MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "rul_model.pkl"))
 
 # Column names
 columns = ["engine_id", "cycle", "setting1", "setting2", "setting3"]
-for i in range(1,22):
+for i in range(1, 22):
     columns.append(f"sensor_{i}")
 
-df = pd.read_csv(
-    r"C:\Users\harsh\OneDrive\Desktop\Smart Factory\data\train_FD001.txt",
-    sep=r"\s+",
-    header=None,
-    names=columns
-)
+# Load data
+df = pd.read_csv(DATA_PATH, sep=r"\s+", header=None, names=columns)
 
-# True RUL
+# Compute RUL
 max_cycles = df.groupby("engine_id")["cycle"].max()
-df["RUL"] = df.apply(lambda x: max_cycles[x.engine_id] - x.cycle, axis=1)
+df["RUL"] = df["engine_id"].map(max_cycles) - df["cycle"]
 
-X = df[[f"sensor_{i}" for i in range(1,22)]]
+# Features and target
+X = df[[f"sensor_{i}" for i in range(1, 22)]]
 y = df["RUL"]
 
-model = RandomForestRegressor(n_estimators=200, max_depth=12, random_state=42)
+# Train model
+model = RandomForestRegressor(n_estimators=150, max_depth=10, random_state=42)
 model.fit(X, y)
 
-joblib.dump(model, r"C:\Users\harsh\OneDrive\Desktop\Smart Factory\backend\rul_model.pkl")
-print("RUL model saved")
+# Save model
+joblib.dump(model, MODEL_PATH)
+
+print("RUL prediction model trained and saved.")
