@@ -6,9 +6,7 @@ import os
 st.set_page_config(layout="wide")
 st.title("Smart Factory Digital Twin")
 
-# -------------------------------
-# Path handling (GitHub-safe)
-# -------------------------------
+
 BASE_DIR = os.path.dirname(__file__)
 BACKEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "backend"))
 DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "data"))
@@ -17,22 +15,16 @@ MODEL_PATH = os.path.join(BACKEND_DIR, "model.pkl")
 RUL_MODEL_PATH = os.path.join(BACKEND_DIR, "rul_model.pkl")
 DATA_PATH = os.path.join(DATA_DIR, "train_FD001.txt")
 
-# -------------------------------
-# Load models
-# -------------------------------
+
 model = joblib.load(MODEL_PATH)
 rul_model = joblib.load(RUL_MODEL_PATH)
 
-# -------------------------------
-# Column names
-# -------------------------------
+
 columns = ["engine_id", "cycle", "setting1", "setting2", "setting3"]
 for i in range(1, 22):
     columns.append(f"sensor_{i}")
 
-# -------------------------------
-# Load dataset
-# -------------------------------
+
 data = pd.read_csv(
     DATA_PATH,
     sep=r"\s+",
@@ -40,9 +32,7 @@ data = pd.read_csv(
     names=columns
 )
 
-# -------------------------------
-# Sidebar controls
-# -------------------------------
+
 st.sidebar.header("Controls")
 
 engine = st.sidebar.slider(
@@ -61,21 +51,15 @@ step = st.sidebar.slider(
     0
 )
 
-# -------------------------------
-# Extract sensor values
-# -------------------------------
+
 sensor_cols = [f"sensor_{i}" for i in range(1, 22)]
 sensors = engine_data.loc[[step], sensor_cols]
 
-# -------------------------------
-# AI Predictions
-# -------------------------------
+
 failure_prob = model.predict_proba(sensors)[0][1]
 predicted_rul = rul_model.predict(sensors)[0]
 
-# -------------------------------
-# Layout
-# -------------------------------
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -99,9 +83,7 @@ with col2:
 
     st.line_chart(history.set_index("time")["sensor_3"])
 
-# -------------------------------
-# Sensor Snapshot
-# -------------------------------
+
 st.subheader("Current Sensor Snapshot")
 st.dataframe(sensors)
 
