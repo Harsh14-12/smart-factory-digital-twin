@@ -2,24 +2,24 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
-
-os.system("python ../backend/setup.py")
-
-
+import subprocess
 
 st.set_page_config(layout="wide")
 st.title("Smart Factory Digital Twin")
 
-
-BASE_DIR = os.path.dirname(__file__)
-BACKEND_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "backend"))
-DATA_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "data"))
+# Absolute project paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(BASE_DIR, "backend")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 
 MODEL_PATH = os.path.join(BACKEND_DIR, "model.pkl")
 RUL_MODEL_PATH = os.path.join(BACKEND_DIR, "rul_model.pkl")
 DATA_PATH = os.path.join(DATA_DIR, "train_FD001.txt")
 
+# Run setup before loading models
+subprocess.run(["python", os.path.join(BACKEND_DIR, "setup.py")], check=False)
 
+# Now load models (they must exist now)
 model = joblib.load(MODEL_PATH)
 rul_model = joblib.load(RUL_MODEL_PATH)
 
