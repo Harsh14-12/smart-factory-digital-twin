@@ -3,7 +3,8 @@ import pandas as pd
 import joblib
 import os
 
-os.system("python backend/setup.py")
+os.system("python ../backend/setup.py")
+
 
 
 st.set_page_config(layout="wide")
