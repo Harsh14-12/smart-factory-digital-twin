@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
-import subprocess
 
 st.set_page_config(layout="wide")
 st.title("Smart Factory Digital Twin")
@@ -16,8 +15,6 @@ MODEL_PATH = os.path.join(BACKEND_DIR, "model.pkl")
 RUL_MODEL_PATH = os.path.join(BACKEND_DIR, "rul_model.pkl")
 DATA_PATH = os.path.join(DATA_DIR, "train_FD001.txt")
 
-# Train models automatically if missing
-subprocess.run(["python", os.path.join(BACKEND_DIR, "setup.py")], check=True)
 
 # Now load models (they must exist now)
 model = joblib.load(MODEL_PATH)
