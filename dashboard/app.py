@@ -16,8 +16,8 @@ MODEL_PATH = os.path.join(BACKEND_DIR, "model.pkl")
 RUL_MODEL_PATH = os.path.join(BACKEND_DIR, "rul_model.pkl")
 DATA_PATH = os.path.join(DATA_DIR, "train_FD001.txt")
 
-# Run setup before loading models
-subprocess.run(["python", os.path.join(BACKEND_DIR, "setup.py")], check=False)
+# Train models automatically if missing
+subprocess.run(["python", os.path.join(BACKEND_DIR, "setup.py")], check=True)
 
 # Now load models (they must exist now)
 model = joblib.load(MODEL_PATH)
