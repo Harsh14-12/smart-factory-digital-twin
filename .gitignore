@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ML models
+*.pkl
+
+# Streamlit
+.streamlit/
+
+# Data (optional if large)
+# data/train_FD001.txt
+
+# Logs
+*.log
