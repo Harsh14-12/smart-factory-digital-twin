@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 import joblib
 import streamlit as st
@@ -19,7 +20,7 @@ DATA_PATH = os.path.join(DATA_DIR, "train_FD001.txt")
 # --- Train models FIRST if missing ---
 if not os.path.exists(MODEL_PATH) or not os.path.exists(RUL_MODEL_PATH):
     subprocess.run(
-        ["python", os.path.join(BACKEND_DIR, "setup.py")],
+        [sys.executable, os.path.join(BACKEND_DIR, "setup.py")],
         check=True
     )
 
